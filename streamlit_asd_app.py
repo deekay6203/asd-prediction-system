@@ -2,15 +2,21 @@ import streamlit as st
 import pandas as pd
 import joblib
 import os
+import shap
 from sklearn.preprocessing import LabelEncoder
 
-BASE_DIR = os.getcwd()
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 model = joblib.load(os.path.join(BASE_DIR, "asd_best_model.pkl"))
-explainer = joblib.load(os.path.join(BASE_DIR, "asd_shap_explainer.pkl"))
-feature_columns = joblib.load(os.path.join(BASE_DIR, "asd_feature_columns.pkl"))
+feature_columns = joblib.load(
+    os.path.join(BASE_DIR, "asd_feature_columns.pkl")
+)
 
-raw_df = pd.read_csv(os.path.join(BASE_DIR, "autism_screening.csv"))
+explainer = shap.TreeExplainer(model)
+
+raw_df = pd.read_csv(
+    os.path.join(BASE_DIR, "autism_screening.csv")
+)
 
 st.set_page_config(page_title="ASD Prediction System", layout="wide")
 
@@ -75,7 +81,6 @@ def encode_dropdown(model_feature, raw_feature, label):
 
     input_data[model_feature] = int(encoder.transform([selected])[0])
 
-
 st.subheader("Behavioural Screening Questions")
 
 score_cols = [
@@ -93,7 +98,6 @@ for i, feature in enumerate(score_cols):
             key=feature
         )
         input_data[feature] = 1 if answer == "Yes" else 0
-
 
 st.subheader("Demographic Information")
 
@@ -128,7 +132,6 @@ for feature in feature_columns:
                 step=1.0
             )
 
-
 input_df = pd.DataFrame([input_data])
 input_df = input_df[feature_columns]
 
@@ -143,7 +146,6 @@ with center:
     )
 
 if predict:
-
     prediction = model.predict(input_df)[0]
     probability = model.predict_proba(input_df)[0][1]
 
@@ -184,3 +186,4 @@ if predict:
 
     st.subheader("Top Behavioural Indicators")
     st.dataframe(shap_df.head(5), use_container_width=True)
+    
