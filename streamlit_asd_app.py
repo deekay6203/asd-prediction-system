@@ -287,6 +287,7 @@ if predict:
     )
 
     st.info(
-        "This application is intended for research and educational purposes only "
-        "and should not be used as a substitute for professional clinical diagnosis."
+        "This application is intended for research and educational purposes "
+        "only and should not be used as a substitute for professional "
+        "clinical diagnosis."
     )
