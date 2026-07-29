@@ -6,7 +6,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 model = joblib.load(os.path.join(BASE_DIR, "asd_best_model.pkl"))
-explainer = joblib.load(os.path.join(BASE_DIR, "asd_shap_explainer.pkl"))
+explainer = shap.TreeExplainer(model)
 feature_columns = joblib.load(os.path.join(BASE_DIR, "asd_feature_columns.pkl"))
 label_encoders = joblib.load(
     os.path.join(BASE_DIR, "asd_label_encoders.pkl")
