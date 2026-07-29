@@ -2,10 +2,14 @@ import streamlit as st
 import pandas as pd
 import joblib
 import os
+import shap
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-model = joblib.load(os.path.join(BASE_DIR, "asd_best_model.pkl"))
+model = joblib.load(
+    os.path.join(BASE_DIR, "asd_best_model.pkl")
+)
+
 explainer = shap.TreeExplainer(model)
 feature_columns = joblib.load(os.path.join(BASE_DIR, "asd_feature_columns.pkl"))
 label_encoders = joblib.load(
